@@ -1,83 +1,38 @@
 package com.shubham.social.media.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shubham.social.media.models.Post;
+import com.shubham.social.media.service.PostService;
 
 @RestController
 public class PostController {
 	
-	@GetMapping("/posts")
-	public List<Post> getUserPostHandeler() {
+	@Autowired
+	PostService postService;
+	
+	@PostMapping("/posts/users/{userId}")
+	public ResponseEntity<Post> createPost(@RequestBody Post post , @PathVariable int userId) throws Exception {
 		
-		List<Post> posts = new ArrayList<>();
+		Post createdPost = postService.createNewPost(post, userId);
 		
-		Post post1 = new Post(1,"Shubham","@shubham","18-3-2024","Uttarakhand");
-		Post post2 = new Post(2,"Bunny","@bunnu","18-3-2024","Navi");
-		posts.add(post1);
-		posts.add(post2);
-		
-		return posts;
+		return new ResponseEntity<>(createdPost,HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("/posts/{postId}")
-	public Post getUserPostbyId(@PathVariable("postId") int id) {
+	@DeleteMapping("/posts/{postId}/user/{userId}")
+	public ResponseEntity<String> deletePost(@PathVariable int postId ,@PathVariable int userId) throws Exception {
 		
-		Post post1 = new Post(1,"Shubham","@shubham","18-3-2024","Uttarakhand");
-		post1.setPostId(id);
+		String message = postService.deletePost(postId, userId);
 		
-		return post1;
-	}
-	
-	@PostMapping("/posts")
-	public Post createPost(@RequestBody Post post) {
-		
-		Post newpost = new Post();
-		
-		newpost.setFirstName(post.getFirstName());
-		newpost.setLocation(post.getLocation());
-		newpost.setPostId(post.getPostId());
-		newpost.setTimeStamp(post.getTimeStamp());
-		newpost.setUsername(post.getUsername());
-
-		return newpost;
-	}
-	
-	@PutMapping("/posts")
-	public Post updatePost(@RequestBody Post post) {
-		
-		Post post1 = new Post(1,"Shubham","@shubham","18-3-2024","Uttarakhand");
-		
-		if(post.getFirstName()!=null) {
-			post1.setFirstName(post.getFirstName());
-		}
-		if(post.getLocation()!=null) {
-			post1.setLocation(post.getLocation());
-		}
-		if(post.getUsername()!=null) {
-			post1.setUsername(post.getUsername());
-		}
-		
-		return post1;
+		return null;
 		
 	}
-	
-	@DeleteMapping("/posts/{postId}")
-	public String deletePost(@PathVariable("postId") int id) {
-		
-		return "post deleted with id "+id;
-	}
-	
-	
-	
 
 }

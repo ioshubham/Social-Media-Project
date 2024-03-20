@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -12,7 +14,9 @@ import jakarta.persistence.Table;
 public class User {
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
+	
 //	@Column(name="myName") use this to change column name
 	private String FirstName;
 	private String lastName;
@@ -21,6 +25,7 @@ public class User {
 	private String gender;
 	private List<Integer> followers = new ArrayList<>();
 	private List<Integer> followings = new ArrayList<>();
+	private List<Post> savedPost = new ArrayList<>();
 	
 	
 	public User() {
@@ -119,6 +124,16 @@ public class User {
 
 	public void setFollowings(List<Integer> followings) {
 		this.followings = followings;
+	}
+
+
+	public List<Post> getSavedPost() {
+		return savedPost;
+	}
+
+
+	public void setSavedPost(List<Post> savedPost) {
+		this.savedPost = savedPost;
 	}
 
 	
