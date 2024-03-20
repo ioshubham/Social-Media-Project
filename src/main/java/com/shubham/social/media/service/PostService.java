@@ -10,7 +10,7 @@ public interface PostService {
 	
 	String deletePost(int postId , int userId) throws Exception;
 	
-	List<Post> findPostsByUserId(int userId) throws Exception;
+	List<Post> findPostsByUserId(int user_id) throws Exception;
 	
 	Post findPostById(int postId) throws Exception;
 	

@@ -50,10 +50,10 @@ public class PostController {
 		return new ResponseEntity<Post>(post,HttpStatus.OK);	
 	}
 	
-	@GetMapping("/post/user/{userId}")
-	public ResponseEntity<List<Post>> findUserPost(@PathVariable int userId) throws Exception {
+	@GetMapping("/post/user/{user_id}")
+	public ResponseEntity<List<Post>> findUserPost(@PathVariable int user_id) throws Exception {
 		
-		List<Post> post = postService.findPostsByUserId(userId);
+		List<Post> post = postService.findPostsByUserId(user_id);
 		
 		return new ResponseEntity<List<Post>>(post,HttpStatus.OK);
 	}

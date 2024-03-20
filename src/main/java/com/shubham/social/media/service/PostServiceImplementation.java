@@ -1,5 +1,6 @@
 package com.shubham.social.media.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,10 +31,12 @@ public class PostServiceImplementation implements PostService {
 				
 		Post newPost = new Post();
 		newPost.setCaption(post.getCaption());
-		//newPost.setCreateAt(new LocalDateTime.now());
+		newPost.setCreateAt(LocalDateTime.now());
 		newPost.setImage(post.getImage());
 		newPost.setVideo(post.getVideo());
 		newPost.setUser(user);
+		
+		postRepository.save(newPost);
 		
 		
 		return newPost;
@@ -55,9 +58,9 @@ public class PostServiceImplementation implements PostService {
 	}
 
 	@Override
-	public List<Post> findPostsByUserId(int userId) throws Exception {
+	public List<Post> findPostsByUserId(int user_id) throws Exception {
 		
-		return postRepository.findPostByUserId(userId);
+		return postRepository.findPostByUserId(user_id);
 	}
 
 	@Override
@@ -87,12 +90,13 @@ public class PostServiceImplementation implements PostService {
 		Post post = findPostById(postId);
 		User user = userService.findUserById(userId);
 		
-		post.getLiked().add(user);
+		
 		
 		if(post.getLiked().contains(user)) {
 			post.getLiked().remove(user);
 		}
 		else {
+			post.getLiked().add(user);
 			postRepository.save(post);
 		}
 		return post;
