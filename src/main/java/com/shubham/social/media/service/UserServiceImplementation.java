@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.shubham.social.media.config.JwtProvider;
 import com.shubham.social.media.models.User;
 import com.shubham.social.media.repository.UserRepository;
 
@@ -48,18 +49,18 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public User followUser(int userId1, int userId2) throws Exception {
+	public User followUser(int reqUserId, int userId2) throws Exception {
 		
-		User user1 = findUserById(userId1);
+		User reqUser = findUserById(reqUserId);
 		User user2 = findUserById(userId2);
 		
-		user2.getFollowers().add(user1.getId());
-		user1.getFollowings().add(user2.getId());
+		user2.getFollowers().add(reqUser .getId());
+		reqUser .getFollowings().add(user2.getId());
 		
-		userRepository.save(user1);
+		userRepository.save(reqUser );
 		userRepository.save(user2);
 		
-		return user1;
+		return reqUser ;
 	}
 
 	@Override
@@ -95,6 +96,14 @@ public class UserServiceImplementation implements UserService {
 		
 		List<User> users = userRepository.searchUser(query);
 		return users;
+	}
+
+	@Override
+	public User findUserByJwt(String jwt) {
+		String email = JwtProvider.getEmailFromJwtToken(jwt);
+		
+		User user = userRepository.findByEmail(email);
+		return user;
 	}
 
 }
