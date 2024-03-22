@@ -30,12 +30,15 @@ public class Post {
 	@OneToMany  // 1 post can be like by many user
 	private List<User> liked = new ArrayList<>();
 	
+	@OneToMany
+	private List<Comment> comments = new ArrayList<>();
+	
 	public Post() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public Post(int postId, String caption, String image, String video, User user, LocalDateTime createAt,
-			List<User> liked) {
+			List<User> liked, List<Comment> comments) {
 		super();
 		this.postId = postId;
 		this.caption = caption;
@@ -44,6 +47,7 @@ public class Post {
 		this.user = user;
 		this.createAt = createAt;
 		this.liked = liked;
+		this.comments = comments;
 	}
 
 	public int getPostId() {
@@ -52,6 +56,14 @@ public class Post {
 
 	public void setPostId(int postId) {
 		this.postId = postId;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 
 	public String getCaption() {
