@@ -1,27 +1,48 @@
 package com.shubham.social.media.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shubham.social.media.models.Story;
+import com.shubham.social.media.models.User;
+import com.shubham.social.media.service.StoryService;
+import com.shubham.social.media.service.UserService;
 
 @RestController
 public class StoryController {
 	
-	@GetMapping("/story")
-	public List<Story> storyHandeler() {
-		List<Story> stories = new ArrayList<>();
+
+	@Autowired
+	public StoryService storyService;
+	
+	@Autowired
+	private UserService userService;
+	
+	@PostMapping("/api/story")
+	public Story createStory(@RequestBody Story story ,@RequestHeader("Authorization")String jwt) {
 		
-		Story s1 = new Story("Shubham","18-03-2024");
-		Story s2 = new Story("Bunny","18-03-2024");
+		User reqUser = userService.findUserByJwt(jwt);
 		
-		stories.add(s1);
-		stories.add(s2);
+		Story createdStory = storyService.createStory(story, reqUser);
+		return createdStory;
+	}
+	
+	@GetMapping("/api/story/user/{userId}")
+	public List<Story> findUserStory(@PathVariable int userId, @RequestHeader("Authorization")String jwt) throws Exception {
 		
+		User reqUser = userService.findUserByJwt(jwt);
+		
+		List<Story> stories= storyService.findStoryByUserId(userId);
 		return stories;
 	}
+	
+	
 
 }
