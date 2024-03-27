@@ -1,29 +1,49 @@
 package com.shubham.social.media.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shubham.social.media.models.Message;
+import com.shubham.social.media.models.Messages;
+import com.shubham.social.media.models.User;
+import com.shubham.social.media.service.MessageService;
+import com.shubham.social.media.service.UserService;
 
 @RestController
 public class MessageController {
 	
-	@GetMapping("/message")
-	public List<Message> messageControllerHandeler() {
+	@Autowired
+	private MessageService messageService;
+	
+	@Autowired
+	private UserService userService;
+	
+	@PostMapping("/api/messages/chat/{chatId}")
+	public Messages createMessage(@RequestBody Messages req,@RequestHeader("Authorization") String jwt,@PathVariable int chatId) throws Exception {
 		
-		List<Message> messages = new ArrayList<>();
+		User user = userService.findUserByJwt(jwt);
 		
-		Message m1 = new Message("Shubham","Bunyy","Hello bunny");
-		Message m2 = new Message("Bunyy","Shubham","Hello Shubham");
+		Messages message = messageService.createMessages(user, chatId , req);
 		
-		messages.add(m1);
-		messages.add(m2);
 		
-		return messages;
+		return message;
 	}
 	
-
+	@GetMapping("/api/messages/chat/{chatId}")
+	public List<Messages> findChatMessage(@RequestHeader("Authorization") String jwt,@PathVariable int chatId) throws Exception {
+		
+		User user = userService.findUserByJwt(jwt);
+		
+		List<Messages> message = messageService.findChatsMessages(chatId);
+		
+		return message;
+	}
+	
+	
 }
