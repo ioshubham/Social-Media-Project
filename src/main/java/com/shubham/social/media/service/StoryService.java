@@ -2,6 +2,8 @@ package com.shubham.social.media.service;
 
 import java.util.List;
 
+import com.shubham.social.media.exceptions.StoryException;
+import com.shubham.social.media.exceptions.UserException;
 import com.shubham.social.media.models.Story;
 import com.shubham.social.media.models.User;
 
