@@ -20,7 +20,7 @@ public class ChatServiceImplementation implements ChatService {
 	@Override
 	public Chat createChat(User reqUser, User user2) {
 		
-		Chat isExist = chatRepository.findChatByUserId(user2, reqUser);
+		Chat isExist = chatRepository.findChatByUsersId(reqUser, user2);
 		
 		if(isExist !=null) {
 			return isExist;
